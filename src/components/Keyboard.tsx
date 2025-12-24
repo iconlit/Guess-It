@@ -1,14 +1,19 @@
 "use client";
 import React from "react";
 
-export default function Keyboard({ onKey = () => {}, letterStates = {} }) {
-  const rows = [
+interface KeyboardProps {
+  onKey: (key: string) => void;
+  letterStates: Record<string, "correct" | "misplaced" | "wrong" | undefined>;
+}
+
+export default function Keyboard({ onKey, letterStates }: KeyboardProps) {
+  const rows: string[][] = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
     ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACKSPACE"],
   ];
 
-  const getKeyClass = (key) => {
+  const getKeyClass = (key: string) => {
     const state = letterStates[key];
     switch (state) {
       case "correct":
@@ -22,18 +27,10 @@ export default function Keyboard({ onKey = () => {}, letterStates = {} }) {
     }
   };
 
-  const isWideKey = (key) => key === "ENTER" || key === "BACKSPACE";
+  const isWideKey = (key: string) => key === "ENTER" || key === "BACKSPACE";
 
   return (
-    <div
-      className="
-        w-full max-w-[520px]
-        mx-auto mt-4
-        flex flex-col gap-2
-        px-1 sm:px-2
-        select-none
-      "
-    >
+    <div className="w-full max-w-[520px] mx-auto mt-4 flex flex-col gap-2 px-1 sm:px-2 select-none">
       {rows.map((row, i) => (
         <div key={i} className="flex justify-center gap-[0.3rem] sm:gap-2">
           {row.map((key) => (
@@ -44,8 +41,7 @@ export default function Keyboard({ onKey = () => {}, letterStates = {} }) {
                 flex items-center justify-center
                 ${isWideKey(key) ? "flex-[1.5]" : "flex-1"}
                 h-9 sm:h-11 md:h-12
-                rounded-md
-                font-bold
+                rounded-md font-bold
                 text-[0.65rem] sm:text-sm md:text-base
                 ${getKeyClass(key)}
                 active:scale-95 transition
